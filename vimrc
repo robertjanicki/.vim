@@ -1,6 +1,32 @@
 """"""""""
 ""Robert""
 """"""""""
+5
+" VIM and programming specific
+syntax on
+set nocompatible
+set backspace=2 " make backspace work like most other programs
+set nowrap
+set encoding=utf8
+set nobackup
+set noshowmode
+set nowritebackup
+set ruler
+set clipboard=unnamed
+let mapleader = "\\"
+
+" Let's save undo info!
+if !isdirectory($HOME."/.vim")
+    call mkdir($HOME."/.vim", "", 0770)
+endif
+if !isdirectory($HOME."/.vim/undo-dir")
+    call mkdir($HOME."/.vim/undo-dir", "", 0700)
+endif
+set undodir=~/.vim/undo-dir
+set undofile
+
+" Enabling ELITE MODE
+let g:elite_mode=1
 
 " Automatic Plug installation script
 if empty(glob('~/.vim/autoload/plug.vim'))
@@ -31,7 +57,16 @@ Plug 'dense-analysis/ale'
 " Auto Pairs: Adds missing character pairs, e.g. {}, ()
 Plug 'jiangmiao/auto-pairs'
 
-" Tagbar: Class outline viewer. Dependencies: ctags
+" Dart Language support
+Plug 'dart-lang/dart-vim-plugin'
+
+" Dart Language Server Client
+Plug 'natebosch/vim-lsc-dart'
+
+" Language Server Client
+Plug 'natebosch/vim-lsc'
+
+"  Tagbar: Class outline viewer. Dependencies: ctags
 Plug 'majutsushi/tagbar'
 
 " Tcomment: Comment toggling
@@ -63,9 +98,6 @@ call plug#end()
 " No preview
 set completeopt-=preview
 
-" No line wrap
-set nowrap
-
 " Show line numbers
 set number relativenumber
 
@@ -75,16 +107,9 @@ set number relativenumber
 :  autocmd BufLeave,FocusLost,InsertEnter   * set norelativenumber
 :augroup END
 
-" Long text highlighting
-highlight LengthWarning ctermbg=216 ctermfg=white guibg=#592929
-"highlight LengthOver120 ctermbg=203 ctermfg=white guibg=#592929
-
-match LengthWarning /\%>79v./
-"match LengthOver80 /\%>79v.\%<120v/
-"match LengthOver120 /\%>120v./
-
-" Syntax highlighting
-syntax on
+" Column highlighting
+set colorcolumn=80,120
+highlight ColorColumn ctermbg=235
 
 " Invisible characters
 set listchars=tab:▸\ ,eol:¬
@@ -109,6 +134,30 @@ autocmd FileType c,cpp,objc,h,hpp vnoremap <buffer><F4> :ClangFormat<CR>
 
 " NERD Tree
 nmap <F2> :NERDTreeToggle<CR>
+nnoremap <leader>n :NERDTreeFocus<CR>
+nnoremap <C-n> :NERDTree<CR>
+nnoremap <C-f> :NERDTreeFind<CR>
 
 " Tagbar
 nmap <F3> :TagbarToggle<CR>
+
+" ELITE MODE
+if get(g:, 'elite_mode')
+        nnoremap <Up>    :resize +2<CR>
+        nnoremap <Down>  :resize -2<CR>
+        nnoremap <Left>  :vertical resize +2<CR>
+        nnoremap <Right> :vertical resize -2<CR>
+endif
+
+" Dart Vim CONFIG
+let dart_html_in_string=v:true
+let g:dart_style_guide = 2
+let g:dart_format_on_save = 1
+
+" LSC CONFIG
+let g:lsc_dart_sdk_path = '~/snap/flutter/common/flutter/bin/cache/dart-sdk'
+let g:lsc_server_commands = {'dart': 'dart_language_server'}
+
+" Use all the defaults (recommended):
+let g:lsc_auto_map = v:true
+

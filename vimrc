@@ -12,7 +12,7 @@ set nobackup
 set noshowmode
 set nowritebackup
 set ruler
-set clipboard=unnamed
+set clipboard=unnamedplus
 let mapleader = "\\"
 
 " Let's save undo info!
